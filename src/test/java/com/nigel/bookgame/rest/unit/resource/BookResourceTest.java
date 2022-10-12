@@ -2,8 +2,8 @@ package com.nigel.bookgame.rest.unit.resource;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.nigel.bookgame.rest.domain.Book;
 import com.nigel.bookgame.rest.resource.BookResource;
@@ -22,13 +22,13 @@ public class BookResourceTest {
         
         final BookResource bookResource = new BookResource(book);
         
-        Assert.assertEquals(Long.valueOf(1), bookResource.getResourceId());
-        Assert.assertEquals("My book", bookResource.getName());
-        Assert.assertFalse(bookResource.isComplete());
+        Assertions.assertThat(bookResource.getResourceId()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(bookResource.getName()).isEqualTo("My book");
+        Assertions.assertThat(bookResource.isComplete()).isFalse();
         
         final List<String> lines = bookResource.getLines();
-        Assert.assertEquals(1, lines.size());
-        Assert.assertEquals("Line 4.", lines.get(0));
+        Assertions.assertThat(lines).hasSize(1);
+        Assertions.assertThat(lines.get(0)).isEqualTo("Line 4.");
     }
     
     @Test
@@ -38,17 +38,17 @@ public class BookResourceTest {
         
         final BookResource bookResource = new BookResource(book);
         
-        Assert.assertEquals(Long.valueOf(1), bookResource.getResourceId());
-        Assert.assertEquals("My book", bookResource.getName());
-        Assert.assertTrue(bookResource.isComplete());
+        Assertions.assertThat(bookResource.getResourceId()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(bookResource.getName()).isEqualTo("My book");
+        Assertions.assertThat(bookResource.isComplete()).isTrue();
         
         final List<String> lines = bookResource.getLines();
-        Assert.assertEquals(5, lines.size());
-        Assert.assertEquals("Line 1.", lines.get(0));
-        Assert.assertEquals("Line 2.", lines.get(1));
-        Assert.assertEquals("Line 3.", lines.get(2));
-        Assert.assertEquals("Line 4.", lines.get(3));
-        Assert.assertEquals("Line 5.", lines.get(4));
+        Assertions.assertThat(lines).hasSize(5);
+        Assertions.assertThat(lines.get(0)).isEqualTo("Line 1.");
+        Assertions.assertThat(lines.get(1)).isEqualTo("Line 2.");
+        Assertions.assertThat(lines.get(2)).isEqualTo("Line 3.");
+        Assertions.assertThat(lines.get(3)).isEqualTo("Line 4.");
+        Assertions.assertThat(lines.get(4)).isEqualTo("Line 5.");
     }
     
     @Test
@@ -58,10 +58,10 @@ public class BookResourceTest {
         
         final BookResource bookResource = new BookResource(book);
         
-        Assert.assertEquals(Long.valueOf(1), bookResource.getResourceId());
-        Assert.assertEquals("My book", bookResource.getName());
-        Assert.assertFalse(bookResource.isComplete());
-        Assert.assertTrue(bookResource.getLines().isEmpty());
+        Assertions.assertThat(bookResource.getResourceId()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(bookResource.getName()).isEqualTo("My book");
+        Assertions.assertThat(bookResource.isComplete()).isFalse();
+        Assertions.assertThat(bookResource.getLines()).isEmpty();
     }
     
     private Book createEmptyBook() {

@@ -3,13 +3,11 @@ package com.nigel.bookgame.rest.unit.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.nigel.bookgame.rest.domain.Book;
 import com.nigel.bookgame.rest.domain.BookContainer;
@@ -22,7 +20,6 @@ import com.nigel.bookgame.rest.repository.BookRepository;
  * 
  * @author nigel
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class BookRepositoryTest {
 	
@@ -33,7 +30,7 @@ public class BookRepositoryTest {
 	@Autowired
 	private BookRepository repository;
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.repository.clear();
 	}
@@ -43,8 +40,8 @@ public class BookRepositoryTest {
 		
 	    final BookContainer bookContainer = this.repository.findById(NON_EXISTENT_ID, PLAYER_NAME_1);
 		
-	    Assert.assertNull(bookContainer.getBook());
-		Assert.assertEquals(ERetrievalOutcome.NOT_FOUND, bookContainer.getRetrievalOutcome());
+	    Assertions.assertThat(bookContainer.getBook()).isNull();
+		Assertions.assertThat(bookContainer.getRetrievalOutcome()).isEqualTo(ERetrievalOutcome.NOT_FOUND);
 	}
 	
 	@Test
@@ -56,8 +53,8 @@ public class BookRepositoryTest {
 		
 		final Book bookFound = bookContainer.getBook();
 		
-        Assert.assertNotNull(bookFound);
-        Assert.assertEquals(ERetrievalOutcome.SUCCESS, bookContainer.getRetrievalOutcome());
+        Assertions.assertThat(bookFound).isNotNull();
+        Assertions.assertThat(bookContainer.getRetrievalOutcome()).isEqualTo(ERetrievalOutcome.SUCCESS);
         assertBooksMatch(book, bookFound);
 	}
     
@@ -69,9 +66,9 @@ public class BookRepositoryTest {
         this.repository.findById(book.getId(), PLAYER_NAME_1);
         
         final BookContainer bookContainer = this.repository.findById(book.getId(), PLAYER_NAME_2);
-        
-        Assert.assertNull(bookContainer.getBook());
-        Assert.assertEquals(ERetrievalOutcome.LOCKED_BY_ANOTHER_PLAYER, bookContainer.getRetrievalOutcome());
+		
+	    Assertions.assertThat(bookContainer.getBook()).isNull();
+		Assertions.assertThat(bookContainer.getRetrievalOutcome()).isEqualTo(ERetrievalOutcome.LOCKED_BY_ANOTHER_PLAYER);
     }
     
     @Test
@@ -82,9 +79,9 @@ public class BookRepositoryTest {
         this.repository.findById(book.getId(), PLAYER_NAME_1);
         
         final BookContainer bookContainer = this.repository.findById(book.getId(), PLAYER_NAME_1);
-        
-        Assert.assertNotNull(bookContainer.getBook());
-        Assert.assertEquals(ERetrievalOutcome.SUCCESS, bookContainer.getRetrievalOutcome());
+		
+        Assertions.assertThat(bookContainer.getBook()).isNotNull();
+        Assertions.assertThat(bookContainer.getRetrievalOutcome()).isEqualTo(ERetrievalOutcome.SUCCESS);
     }
 	
 	@Test
@@ -92,7 +89,7 @@ public class BookRepositoryTest {
 	    
         final List<Book> books = this.repository.findAll();
         
-        Assert.assertTrue(books.isEmpty());
+        Assertions.assertThat(books).isEmpty();
 	}
 	
 	@Test
@@ -102,7 +99,7 @@ public class BookRepositoryTest {
 	    
         final List<Book> booksFound = this.repository.findAll();
         
-        Assert.assertEquals(1, booksFound.size());
+        Assertions.assertThat(booksFound).hasSize(1);
         assertBooksMatch(books.get(0), booksFound.get(0));
 	}
 	
@@ -113,7 +110,7 @@ public class BookRepositoryTest {
         
         final List<Book> booksFound = this.repository.findAll();
         
-        Assert.assertEquals(2, booksFound.size());
+        Assertions.assertThat(booksFound).hasSize(2);
         assertBooksMatch(books.get(0), booksFound.get(0));
         assertBooksMatch(books.get(1), booksFound.get(1));
 	}
@@ -125,7 +122,7 @@ public class BookRepositoryTest {
 		
         final EUpdateOutcome updateOutcome = this.repository.update(book.getId(), new Book(), PLAYER_NAME_1, true);
         
-        Assert.assertEquals(EUpdateOutcome.REQUESTING_PLAYER_DOES_NOT_HAVE_LOCK, updateOutcome);
+        Assertions.assertThat(updateOutcome).isEqualTo(EUpdateOutcome.REQUESTING_PLAYER_DOES_NOT_HAVE_LOCK);
 	}
 	
 	@Test
@@ -134,8 +131,8 @@ public class BookRepositoryTest {
 		final Book book = createBook();
 		
 		final EUpdateOutcome updateOutcome = this.repository.update(book.getId(), null, PLAYER_NAME_1, true);
-		
-        Assert.assertEquals(EUpdateOutcome.NULL_BOOK_SUPPLIED, updateOutcome);
+        
+        Assertions.assertThat(updateOutcome).isEqualTo(EUpdateOutcome.NULL_BOOK_SUPPLIED);
 	}
     
     @Test
@@ -146,7 +143,7 @@ public class BookRepositoryTest {
         
         final EUpdateOutcome updateOutcome = this.repository.update(NON_EXISTENT_ID, book, PLAYER_NAME_1, true);
         
-        Assert.assertEquals(EUpdateOutcome.NOT_FOUND, updateOutcome);
+        Assertions.assertThat(updateOutcome).isEqualTo(EUpdateOutcome.NOT_FOUND);
     }
     
     @Test
@@ -163,7 +160,7 @@ public class BookRepositoryTest {
         
         final EUpdateOutcome updateOutcome = this.repository.update(book.getId(), updatedBook, PLAYER_NAME_1, true);
         
-        Assert.assertEquals(EUpdateOutcome.SUCCESS, updateOutcome);
+        Assertions.assertThat(updateOutcome).isEqualTo(EUpdateOutcome.SUCCESS);
     }
     
     @Test
@@ -178,7 +175,7 @@ public class BookRepositoryTest {
         
         final EUpdateOutcome updateOutcome = this.repository.update(book.getId(), updatedBook, PLAYER_NAME_1, false);
         
-        Assert.assertEquals(EUpdateOutcome.SUCCESS, updateOutcome);
+        Assertions.assertThat(updateOutcome).isEqualTo(EUpdateOutcome.SUCCESS);
     }
     
     private Book createBook() {
@@ -201,9 +198,9 @@ public class BookRepositoryTest {
     }
     
     private void assertBooksMatch(final Book expectedBook, final Book actualBook) {
-        Assert.assertEquals(expectedBook.getId(), actualBook.getId());
-        Assert.assertEquals(expectedBook.getName(), actualBook.getName());
-        Assert.assertEquals(expectedBook.getLineDetailMap(), actualBook.getLineDetailMap());
-        Assert.assertEquals(expectedBook.isComplete(), actualBook.isComplete());
+        Assertions.assertThat(actualBook.getId()).isEqualTo(expectedBook.getId());
+        Assertions.assertThat(actualBook.getName()).isEqualTo(expectedBook.getName());
+        Assertions.assertThat(actualBook.getLineDetailMap()).isEqualTo(expectedBook.getLineDetailMap());
+        Assertions.assertThat(actualBook.isComplete()).isEqualTo(expectedBook.isComplete());
     }
 }

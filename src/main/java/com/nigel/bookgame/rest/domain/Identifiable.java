@@ -5,7 +5,9 @@ package com.nigel.bookgame.rest.domain;
  * 
  * @author nigel
  */
-public interface Identifiable extends org.springframework.hateoas.Identifiable<Long> {
+public interface Identifiable {
     
 	public void setId(Long id);
+    
+	public Long getId();
 }

@@ -3,13 +3,13 @@ package com.nigel.bookgame.rest.unit.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -24,7 +24,7 @@ import com.nigel.bookgame.rest.resource.LeaderboardResourceAssembler;
  * 
  * @author nigel
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class LeaderboardControllerTest {
     
     @Mock
@@ -43,12 +43,12 @@ public class LeaderboardControllerTest {
         final LeaderboardResource leaderboardResource = new LeaderboardResource(listOfBooks);
         
         Mockito.when(this.mockBookRepository.findAll()).thenReturn(listOfBooks);
-        Mockito.when(this.leaderboardResourceAssembler.toResource(Mockito.anyListOf(Book.class))).thenReturn(leaderboardResource);
+        Mockito.when(this.leaderboardResourceAssembler.toResource(Mockito.anyList())).thenReturn(leaderboardResource);
         
         final ResponseEntity<LeaderboardResource> responseEntity = this.leaderboardController.showLeaderboard();
         
-        Assert.assertEquals(leaderboardResource, responseEntity.getBody());
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getBody()).isEqualTo(leaderboardResource);
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         
         Mockito.verify(this.mockBookRepository).findAll();
         Mockito.verify(this.leaderboardResourceAssembler).toResource(listOfBooks);

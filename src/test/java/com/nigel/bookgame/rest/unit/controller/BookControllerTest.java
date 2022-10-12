@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -31,7 +31,7 @@ import com.nigel.bookgame.rest.resource.BookResourceAssembler;
  * 
  * @author nigel
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class BookControllerTest {
     
     @Mock
@@ -54,8 +54,8 @@ public class BookControllerTest {
         
         final ResponseEntity<Collection<BookResource>> responseEntity = this.bookController.findAllBooks();
         
-        Assert.assertEquals(listOfBookResources, responseEntity.getBody());
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getBody()).isEqualTo(listOfBookResources);
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         
         Mockito.verify(this.mockBookRepository).findAll();
         Mockito.verify(this.mockBookResourceAssembler).toResourceCollection(listOfBooks);
@@ -72,15 +72,15 @@ public class BookControllerTest {
         
         final ResponseEntity<BookResource> responseEntity = this.bookController.findBookById(Long.valueOf(1), "Nigel");
         
-        Assert.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         
         final ArgumentCaptor<Long> argumentCaptorForId = ArgumentCaptor.forClass(Long.class);
         final ArgumentCaptor<String> argumentCaptorForPlayerName = ArgumentCaptor.forClass(String.class);
         
         Mockito.verify(this.mockBookRepository).findById(argumentCaptorForId.capture(), argumentCaptorForPlayerName.capture());
         
-        Assert.assertEquals(Long.valueOf(1), argumentCaptorForId.getValue());
-        Assert.assertEquals("Nigel", argumentCaptorForPlayerName.getValue());
+        Assertions.assertThat(argumentCaptorForId.getValue()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(argumentCaptorForPlayerName.getValue()).isEqualTo("Nigel");
     }
     
     @Test
@@ -94,15 +94,15 @@ public class BookControllerTest {
         
         final ResponseEntity<BookResource> responseEntity = this.bookController.findBookById(Long.valueOf(1), "Nigel");
         
-        Assert.assertEquals(HttpStatus.LOCKED, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.LOCKED);
         
         final ArgumentCaptor<Long> argumentCaptorForId = ArgumentCaptor.forClass(Long.class);
         final ArgumentCaptor<String> argumentCaptorForPlayerName = ArgumentCaptor.forClass(String.class);
         
         Mockito.verify(this.mockBookRepository).findById(argumentCaptorForId.capture(), argumentCaptorForPlayerName.capture());
         
-        Assert.assertEquals(Long.valueOf(1), argumentCaptorForId.getValue());
-        Assert.assertEquals("Nigel", argumentCaptorForPlayerName.getValue());
+        Assertions.assertThat(argumentCaptorForId.getValue()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(argumentCaptorForPlayerName.getValue()).isEqualTo("Nigel");
     }
     
     @Test
@@ -122,8 +122,8 @@ public class BookControllerTest {
         
         final ResponseEntity<BookResource> responseEntity = this.bookController.findBookById(Long.valueOf(1), "Nigel");
         
-        Assert.assertEquals(bookResource, responseEntity.getBody());
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getBody()).isEqualTo(bookResource);
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         
         final ArgumentCaptor<Long> argumentCaptorForId = ArgumentCaptor.forClass(Long.class);
         final ArgumentCaptor<String> argumentCaptorForPlayerName = ArgumentCaptor.forClass(String.class);
@@ -131,8 +131,8 @@ public class BookControllerTest {
         Mockito.verify(this.mockBookRepository).findById(argumentCaptorForId.capture(), argumentCaptorForPlayerName.capture());
         Mockito.verify(this.mockBookResourceAssembler).toResource(bookContainer.getBook());
         
-        Assert.assertEquals(Long.valueOf(1), argumentCaptorForId.getValue());
-        Assert.assertEquals("Nigel", argumentCaptorForPlayerName.getValue());
+        Assertions.assertThat(argumentCaptorForId.getValue()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(argumentCaptorForPlayerName.getValue()).isEqualTo("Nigel");
     }
     
     @Test
@@ -151,8 +151,8 @@ public class BookControllerTest {
         
         final ResponseEntity<BookResource> responseEntity = this.bookController.createBook(bookCreateRequest);
         
-        Assert.assertEquals(bookResource, responseEntity.getBody());
-        Assert.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getBody()).isEqualTo(bookResource);
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         
         Mockito.verify(this.mockBookRepository).create(Mockito.isA(Book.class));
         Mockito.verify(this.mockBookResourceAssembler).toResource(book);
@@ -167,7 +167,7 @@ public class BookControllerTest {
         
         final ResponseEntity<BookResource> responseEntity = this.bookController.updateBook(Long.valueOf(1), bookUpdateRequest);
         
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
     
     @Test
@@ -185,15 +185,15 @@ public class BookControllerTest {
         
         final ResponseEntity<BookResource> responseEntity = this.bookController.updateBook(Long.valueOf(1), bookUpdateRequest);
         
-        Assert.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         
         final ArgumentCaptor<Long> argumentCaptorForId = ArgumentCaptor.forClass(Long.class);
         final ArgumentCaptor<String> argumentCaptorForPlayerName = ArgumentCaptor.forClass(String.class);
         
         Mockito.verify(this.mockBookRepository).findById(argumentCaptorForId.capture(), argumentCaptorForPlayerName.capture());
         
-        Assert.assertEquals(Long.valueOf(1), argumentCaptorForId.getValue());
-        Assert.assertEquals("Nigel", argumentCaptorForPlayerName.getValue());
+        Assertions.assertThat(argumentCaptorForId.getValue()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(argumentCaptorForPlayerName.getValue()).isEqualTo("Nigel");
     }
     
     @Test
@@ -211,15 +211,15 @@ public class BookControllerTest {
         
         final ResponseEntity<BookResource> responseEntity = this.bookController.updateBook(Long.valueOf(1), bookUpdateRequest);
         
-        Assert.assertEquals(HttpStatus.LOCKED, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.LOCKED);
         
         final ArgumentCaptor<Long> argumentCaptorForId = ArgumentCaptor.forClass(Long.class);
         final ArgumentCaptor<String> argumentCaptorForPlayerName = ArgumentCaptor.forClass(String.class);
         
         Mockito.verify(this.mockBookRepository).findById(argumentCaptorForId.capture(), argumentCaptorForPlayerName.capture());
         
-        Assert.assertEquals(Long.valueOf(1), argumentCaptorForId.getValue());
-        Assert.assertEquals("Nigel", argumentCaptorForPlayerName.getValue());
+        Assertions.assertThat(argumentCaptorForId.getValue()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(argumentCaptorForPlayerName.getValue()).isEqualTo("Nigel");
     }
     
     @Test
@@ -241,7 +241,7 @@ public class BookControllerTest {
         
         final ResponseEntity<BookResource> responseEntity = this.bookController.updateBook(Long.valueOf(1), bookUpdateRequest);
         
-        Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         
         final ArgumentCaptor<Long> argumentCaptorForId = ArgumentCaptor.forClass(Long.class);
         final ArgumentCaptor<String> argumentCaptorForPlayerName = ArgumentCaptor.forClass(String.class);
@@ -249,8 +249,8 @@ public class BookControllerTest {
         Mockito.verify(this.mockBookRepository).findById(argumentCaptorForId.capture(), argumentCaptorForPlayerName.capture());
         Mockito.verify(this.mockBookRepository).update(Mockito.eq(Long.valueOf(1)), Mockito.any(Book.class), Mockito.eq("Nigel"), Mockito.eq(true));
         
-        Assert.assertEquals(Long.valueOf(1), argumentCaptorForId.getValue());
-        Assert.assertEquals("Nigel", argumentCaptorForPlayerName.getValue());
+        Assertions.assertThat(argumentCaptorForId.getValue()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(argumentCaptorForPlayerName.getValue()).isEqualTo("Nigel");
     }
     
     @Test
@@ -272,7 +272,7 @@ public class BookControllerTest {
         
         final ResponseEntity<BookResource> responseEntity = this.bookController.updateBook(Long.valueOf(1), bookUpdateRequest);
         
-        Assert.assertEquals(HttpStatus.LOCKED, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.LOCKED);
         
         final ArgumentCaptor<Long> argumentCaptorForId = ArgumentCaptor.forClass(Long.class);
         final ArgumentCaptor<String> argumentCaptorForPlayerName = ArgumentCaptor.forClass(String.class);
@@ -280,8 +280,8 @@ public class BookControllerTest {
         Mockito.verify(this.mockBookRepository).findById(argumentCaptorForId.capture(), argumentCaptorForPlayerName.capture());
         Mockito.verify(this.mockBookRepository).update(Mockito.eq(Long.valueOf(1)), Mockito.any(Book.class), Mockito.eq("Nigel"), Mockito.eq(true));
         
-        Assert.assertEquals(Long.valueOf(1), argumentCaptorForId.getValue());
-        Assert.assertEquals("Nigel", argumentCaptorForPlayerName.getValue());
+        Assertions.assertThat(argumentCaptorForId.getValue()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(argumentCaptorForPlayerName.getValue()).isEqualTo("Nigel");
     }
     
     @Test
@@ -303,7 +303,7 @@ public class BookControllerTest {
         
         final ResponseEntity<BookResource> responseEntity = this.bookController.updateBook(Long.valueOf(1), bookUpdateRequest);
         
-        Assert.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         
         final ArgumentCaptor<Long> argumentCaptorForId = ArgumentCaptor.forClass(Long.class);
         final ArgumentCaptor<String> argumentCaptorForPlayerName = ArgumentCaptor.forClass(String.class);
@@ -311,8 +311,8 @@ public class BookControllerTest {
         Mockito.verify(this.mockBookRepository).findById(argumentCaptorForId.capture(), argumentCaptorForPlayerName.capture());
         Mockito.verify(this.mockBookRepository).update(Mockito.eq(Long.valueOf(1)), Mockito.any(Book.class), Mockito.eq("Nigel"), Mockito.eq(true));
         
-        Assert.assertEquals(Long.valueOf(1), argumentCaptorForId.getValue());
-        Assert.assertEquals("Nigel", argumentCaptorForPlayerName.getValue());
+        Assertions.assertThat(argumentCaptorForId.getValue()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(argumentCaptorForPlayerName.getValue()).isEqualTo("Nigel");
     }
     
     @Test
@@ -337,7 +337,7 @@ public class BookControllerTest {
         
         final ResponseEntity<BookResource> responseEntity = this.bookController.updateBook(Long.valueOf(1), bookUpdateRequest);
         
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         
         final ArgumentCaptor<Long> argumentCaptorForId = ArgumentCaptor.forClass(Long.class);
         final ArgumentCaptor<String> argumentCaptorForPlayerName = ArgumentCaptor.forClass(String.class);
@@ -346,7 +346,7 @@ public class BookControllerTest {
         Mockito.verify(this.mockBookRepository).update(Mockito.eq(Long.valueOf(1)), Mockito.any(Book.class), Mockito.eq("Nigel"), Mockito.eq(true));
         Mockito.verify(this.mockBookResourceAssembler).toResource(Mockito.isA(Book.class));
         
-        Assert.assertEquals(Long.valueOf(1), argumentCaptorForId.getValue());
-        Assert.assertEquals("Nigel", argumentCaptorForPlayerName.getValue());
+        Assertions.assertThat(argumentCaptorForId.getValue()).isEqualTo(Long.valueOf(1));
+        Assertions.assertThat(argumentCaptorForPlayerName.getValue()).isEqualTo("Nigel");
     }
 }

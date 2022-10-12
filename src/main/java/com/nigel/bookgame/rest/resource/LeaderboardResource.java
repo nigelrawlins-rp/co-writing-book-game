@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.nigel.bookgame.rest.domain.Book;
 import com.nigel.bookgame.rest.domain.LineDetail;
@@ -18,7 +18,7 @@ import com.nigel.bookgame.rest.domain.LineDetail;
  * 
  * @author nigel
  */
-public class LeaderboardResource extends ResourceSupport {
+public class LeaderboardResource extends RepresentationModel<LeaderboardResource> {
     
     private List<Player> leaderboard = new ArrayList<Player>();
     

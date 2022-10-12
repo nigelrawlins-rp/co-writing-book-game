@@ -3,8 +3,8 @@ package com.nigel.bookgame.rest.unit.resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.nigel.bookgame.rest.domain.Book;
 import com.nigel.bookgame.rest.resource.LeaderboardResource;
@@ -83,20 +83,20 @@ public class LeaderboardResourceTest {
         
         final List<Player> leaderboard = leaderboardResource.getLeaderboard();
         
-        Assert.assertEquals(7, leaderboard.size());
-        Assert.assertEquals("Chloe", leaderboard.get(0).getPlayerName());
-        Assert.assertEquals(Integer.valueOf(30), leaderboard.get(0).getScore());
-        Assert.assertEquals("Jeremy", leaderboard.get(1).getPlayerName());
-        Assert.assertEquals(Integer.valueOf(30), leaderboard.get(1).getScore());
-        Assert.assertEquals("Marie", leaderboard.get(2).getPlayerName());
-        Assert.assertEquals(Integer.valueOf(30), leaderboard.get(2).getScore());
-        Assert.assertEquals("Nick", leaderboard.get(3).getPlayerName());
-        Assert.assertEquals(Integer.valueOf(30), leaderboard.get(3).getScore());
-        Assert.assertEquals("Amaury", leaderboard.get(4).getPlayerName());
-        Assert.assertEquals(Integer.valueOf(20), leaderboard.get(4).getScore());
-        Assert.assertEquals("Nigel", leaderboard.get(5).getPlayerName());
-        Assert.assertEquals(Integer.valueOf(20), leaderboard.get(5).getScore());
-        Assert.assertEquals("Steph", leaderboard.get(6).getPlayerName());
-        Assert.assertEquals(Integer.valueOf(20), leaderboard.get(6).getScore());
+        Assertions.assertThat(leaderboard).hasSize(7);
+        Assertions.assertThat(leaderboard.get(0).getPlayerName()).isEqualTo("Chloe");
+        Assertions.assertThat(leaderboard.get(0).getScore()).isEqualTo(Integer.valueOf(30));
+        Assertions.assertThat(leaderboard.get(1).getPlayerName()).isEqualTo("Jeremy");
+        Assertions.assertThat(leaderboard.get(1).getScore()).isEqualTo(Integer.valueOf(30));
+        Assertions.assertThat(leaderboard.get(2).getPlayerName()).isEqualTo("Marie");
+        Assertions.assertThat(leaderboard.get(2).getScore()).isEqualTo(Integer.valueOf(30));
+        Assertions.assertThat(leaderboard.get(3).getPlayerName()).isEqualTo("Nick");
+        Assertions.assertThat(leaderboard.get(3).getScore()).isEqualTo(Integer.valueOf(30));
+        Assertions.assertThat(leaderboard.get(4).getPlayerName()).isEqualTo("Amaury");
+        Assertions.assertThat(leaderboard.get(4).getScore()).isEqualTo(Integer.valueOf(20));
+        Assertions.assertThat(leaderboard.get(5).getPlayerName()).isEqualTo("Nigel");
+        Assertions.assertThat(leaderboard.get(5).getScore()).isEqualTo(Integer.valueOf(20));
+        Assertions.assertThat(leaderboard.get(6).getPlayerName()).isEqualTo("Steph");
+        Assertions.assertThat(leaderboard.get(6).getScore()).isEqualTo(Integer.valueOf(20));
     }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nigel.bookgame.rest.domain.Book;
@@ -15,7 +15,7 @@ import com.nigel.bookgame.rest.domain.LineDetail;
  * 
  * @author nigel
  */
-public class BookResource extends ResourceSupport {
+public class BookResource extends RepresentationModel<BookResource> {
     
 	private final long id;
 	private final String name;

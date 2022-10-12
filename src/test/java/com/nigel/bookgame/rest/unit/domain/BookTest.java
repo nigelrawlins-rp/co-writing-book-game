@@ -1,7 +1,7 @@
 package com.nigel.bookgame.rest.unit.domain;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.nigel.bookgame.rest.domain.Book;
 import com.nigel.bookgame.rest.domain.LineDetail;
@@ -17,28 +17,28 @@ public class BookTest {
     public void testAddingLines() {
         
         final Book book = new Book();
-        Assert.assertTrue(book.getLineDetailMap().isEmpty());
+        Assertions.assertThat(book.getLineDetailMap()).isEmpty();
         
         book.addLineToLineDetailMap("First line.", "Nigel");
-        Assert.assertEquals(1, book.getLineDetailMap().size());
+        Assertions.assertThat(book.getLineDetailMap()).hasSize(1);
         
         final LineDetail expectedLineDetail = new LineDetail("First line.", "Nigel");
-        Assert.assertEquals(expectedLineDetail.getLine(), book.getLineDetailMap().get(1).getLine());
-        Assert.assertEquals(expectedLineDetail.getPlayerName(), book.getLineDetailMap().get(1).getPlayerName());
+        Assertions.assertThat(expectedLineDetail.getLine()).isEqualTo(book.getLineDetailMap().get(1).getLine());
+        Assertions.assertThat(expectedLineDetail.getPlayerName()).isEqualTo(book.getLineDetailMap().get(1).getPlayerName());
     }
     
     @Test
     public void testLocking() {
         
         final Book book = new Book();
-        Assert.assertNull(book.getLockedBy());
-        Assert.assertTrue(book.lock("Nigel"));
-        Assert.assertEquals("Nigel", book.getLockedBy());
-        Assert.assertFalse(book.lock("Marie"));
-        Assert.assertEquals("Nigel", book.getLockedBy());
+        Assertions.assertThat(book.getLockedBy()).isNull();
+        Assertions.assertThat(book.lock("Nigel")).isTrue();
+        Assertions.assertThat(book.getLockedBy()).isEqualTo("Nigel");
+        Assertions.assertThat(book.lock("Marie")).isFalse();
+        Assertions.assertThat(book.getLockedBy()).isEqualTo("Nigel");
         
         book.unlock();
-        Assert.assertNull(book.getLockedBy());
+        Assertions.assertThat(book.getLockedBy()).isNull();
     }
     
     @Test
@@ -52,11 +52,11 @@ public class BookTest {
         
         final Object object = new Object();
         
-        Assert.assertFalse(book1.equals(object));
-        Assert.assertFalse(book1.equals(book2));
+        Assertions.assertThat(object).isNotEqualTo(book1);
+        Assertions.assertThat(book2).isNotEqualTo(book1);
         
         book2.setId(Long.valueOf(1));
         
-        Assert.assertTrue(book1.equals(book2));
+        Assertions.assertThat(book2).isEqualTo(book1);
     }
 }
